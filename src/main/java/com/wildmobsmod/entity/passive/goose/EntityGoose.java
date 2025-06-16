@@ -1,11 +1,5 @@
 package com.wildmobsmod.entity.passive.goose;
 
-import com.wildmobsmod.entity.ai.EntityAILookIdleGoose;
-import com.wildmobsmod.entity.ai.EntityAIWanderGoose;
-import com.wildmobsmod.items.WildMobsModItems;
-import com.wildmobsmod.main.WildMobsMod;
-
-import fr.iamacat.optimizationsandtweaks.utils.apache.commons.math3.util.FastMath;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
@@ -13,20 +7,21 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraftforge.common.BiomeDictionary;
 
-public class EntityGoose extends EntityCreature implements IAnimals
-{
+import com.wildmobsmod.entity.ai.EntityAILookIdleGoose;
+import com.wildmobsmod.entity.ai.EntityAIWanderGoose;
+import com.wildmobsmod.items.WildMobsModItems;
+import com.wildmobsmod.main.WildMobsMod;
+
+public class EntityGoose extends EntityCreature implements IAnimals {
     //
     // Try adding some new use(s) to geese as I want them to be more than just
     // food.
@@ -37,8 +32,7 @@ public class EntityGoose extends EntityCreature implements IAnimals
     public int animation;
     public int feedingAnimation;
 
-    public EntityGoose(World world)
-    {
+    public EntityGoose(World world) {
         super(world);
         this.setSize(0.5F, 0.7F);
         this.tasks.addTask(0, new EntityAIWanderGoose(this, 1.0D));
@@ -48,13 +42,11 @@ public class EntityGoose extends EntityCreature implements IAnimals
         this.feedingAnimation = 0;
     }
 
-    public int getMaxSpawnedInChunk()
-    {
+    public int getMaxSpawnedInChunk() {
         return WildMobsMod.GOOSE_CONFIG.getMaxPackSize();
     }
 
-    protected void entityInit()
-    {
+    protected void entityInit() {
         super.entityInit();
         this.dataWatcher.addObject(20, (byte) 0);
         this.dataWatcher.addObject(21, (byte) 0);
@@ -64,8 +56,7 @@ public class EntityGoose extends EntityCreature implements IAnimals
         this.dataWatcher.addObject(25, (byte) 0);
     }
 
-    public void writeEntityToNBT(NBTTagCompound nbt)
-    {
+    public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         nbt.setBoolean("IsIdle", this.getIsIdle());
         nbt.setInteger("FlyingState", this.getFlyingState());
@@ -74,8 +65,7 @@ public class EntityGoose extends EntityCreature implements IAnimals
         nbt.setInteger("FlyingTime", this.getFlyingTime());
     }
 
-    public void readEntityFromNBT(NBTTagCompound nbt)
-    {
+    public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
         this.setIsIdle(nbt.getBoolean("IsIdle"));
         this.setFlyingState(nbt.getInteger("FlyingState"));
@@ -84,115 +74,97 @@ public class EntityGoose extends EntityCreature implements IAnimals
         this.setFlyingTime(nbt.getInteger("FlyingTime"));
     }
 
-    public boolean getIsIdle()
-    {
+    public boolean getIsIdle() {
         return (this.dataWatcher.getWatchableObjectByte(20) & 1) != 0;
     }
 
-    public void setIsIdle(boolean flag)
-    {
-        if(flag)
-        {
+    public void setIsIdle(boolean flag) {
+        if (flag) {
             this.dataWatcher.updateObject(20, (byte) 1);
-        }
-        else
-        {
+        } else {
             this.dataWatcher.updateObject(20, (byte) 0);
         }
     }
 
-    public int getFlyingState()
-    {
+    public int getFlyingState() {
         return this.dataWatcher.getWatchableObjectByte(21);
     }
 
-    public void setFlyingState(int state)
-    {
+    public void setFlyingState(int state) {
         this.dataWatcher.updateObject(21, (byte) state);
     }
 
-    public int getFlyingDirectionX()
-    {
+    public int getFlyingDirectionX() {
         return this.dataWatcher.getWatchableObjectByte(22);
     }
 
-    public void setFlyingDirectionX(int x)
-    {
+    public void setFlyingDirectionX(int x) {
         this.dataWatcher.updateObject(22, (byte) x);
     }
 
-    public int getFlyingDirectionZ()
-    {
+    public int getFlyingDirectionZ() {
         return this.dataWatcher.getWatchableObjectByte(23);
     }
 
-    public void setFlyingDirectionZ(int z)
-    {
+    public void setFlyingDirectionZ(int z) {
         this.dataWatcher.updateObject(23, (byte) z);
     }
 
-    public int getFlyingTime()
-    {
+    public int getFlyingTime() {
         return this.dataWatcher.getWatchableObjectByte(24);
     }
 
-    public void setFlyingTime(int time)
-    {
+    public void setFlyingTime(int time) {
         this.dataWatcher.updateObject(24, (byte) time);
     }
 
-    public boolean isAIEnabled()
-    {
+    public boolean isAIEnabled() {
         return true;
     }
 
-    public boolean isInWater()
-    {
+    public boolean isInWater() {
         return false;
     }
 
-    public boolean allowLeashing()
-    {
+    public boolean allowLeashing() {
         return false;
     }
 
     protected void fall(float distance) {}
 
-    protected String getLivingSound()
-    {
+    protected String getLivingSound() {
         return "wildmobsmod:entity.goose.say";
     }
 
-    protected String getHurtSound()
-    {
+    protected String getHurtSound() {
         return "wildmobsmod:entity.goose.hurt";
     }
 
-    protected String getDeathSound()
-    {
+    protected String getDeathSound() {
         return "wildmobsmod:entity.goose.hurt";
     }
 
-    protected float getSoundVolume()
-    {
+    protected float getSoundVolume() {
         return 0.4F;
     }
 
-    protected int getExperiencePoints(EntityPlayer player)
-    {
+    protected int getExperiencePoints(EntityPlayer player) {
         return 1 + this.worldObj.rand.nextInt(3);
     }
 
-    protected void applyEntityAttributes()
-    {
+    protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(6.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2D);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth)
+            .setBaseValue(6.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed)
+            .setBaseValue(0.2D);
     }
 
     protected void updateAITasks() {
-        if (this.spawnPosition != null && (!this.worldObj.isAirBlock(this.spawnPosition.posX, this.spawnPosition.posY, this.spawnPosition.posZ) || this.spawnPosition.posY < 1)) {
-                this.spawnPosition = null;
+        if (this.spawnPosition != null
+            && (!this.worldObj.isAirBlock(this.spawnPosition.posX, this.spawnPosition.posY, this.spawnPosition.posZ)
+                || this.spawnPosition.posY < 1)) {
+            this.spawnPosition = null;
 
         }
 
@@ -203,14 +175,17 @@ public class EntityGoose extends EntityCreature implements IAnimals
             d0 = (int) this.posX + (double) this.getFlyingDirectionX() + 0.5D - this.posX;
             d2 = (int) this.posZ + (double) this.getFlyingDirectionZ() + 0.5D - this.posZ;
             this.updateMotion(d0, d2, 0.4D);
-        } else if (this.getFlyingState() != 1 && this.getFlyingState() != 2 && this.getFlyingState() != 3 && !this.onGround && (this.spawnPosition != null)) {
+        } else if (this.getFlyingState() != 1 && this.getFlyingState() != 2
+            && this.getFlyingState() != 3
+            && !this.onGround
+            && (this.spawnPosition != null)) {
                 d0 = (double) this.spawnPosition.posX + 0.5D - this.posX;
                 d2 = (double) this.spawnPosition.posZ + 0.5D - this.posZ;
 
                 double speed = this.getIsIdle() ? 0.07D : 0.04D;
                 this.updateMotion(d0, d2, speed);
 
-        }
+            }
 
         super.updateAITasks();
     }
@@ -219,7 +194,7 @@ public class EntityGoose extends EntityCreature implements IAnimals
         this.motionX += (Math.signum(d0) * speed - this.motionX) * 0.1500000014901161;
         this.motionZ += (Math.signum(d2) * speed - this.motionZ) * 0.1500000014901161;
 
-        float newRotation = (float) (FastMath.atan2(this.motionZ, this.motionX) * 180.0D / Math.PI) - 90.0F;
+        float newRotation = (float) (Math.atan2(this.motionZ, this.motionX) * 180.0D / Math.PI) - 90.0F;
         float rotationDiff = MathHelper.wrapAngleTo180_float(newRotation - this.rotationYaw);
 
         float maxRotationSpeed = 2.0F;
@@ -252,11 +227,14 @@ public class EntityGoose extends EntityCreature implements IAnimals
             blockOffsetX = 1;
         }
 
-        if (this.worldObj.getBlock(blockX + blockOffsetX, blockY, blockZ + blockOffsetZ).isNormalCube()) {
+        if (this.worldObj.getBlock(blockX + blockOffsetX, blockY, blockZ + blockOffsetZ)
+            .isNormalCube()) {
             this.setFlyingState(0);
         }
     }
+
     private int isJumpingOutOfWaterTimer = 0;
+
     public void onLivingUpdate() {
         super.onLivingUpdate();
 
@@ -347,13 +325,13 @@ public class EntityGoose extends EntityCreature implements IAnimals
 
                     if (this.rand.nextFloat() < 0.00015F && !this.worldObj.isRemote) {
                         this.setFlyingState(1);
-                        this.setFlyingDirectionX(this.rand.nextInt(2) == 0
-                            ? 1000 + this.rand.nextInt(1000)
-                            : 1000 - this.rand.nextInt(1000));
+                        this.setFlyingDirectionX(
+                            this.rand.nextInt(2) == 0 ? 1000 + this.rand.nextInt(1000)
+                                : 1000 - this.rand.nextInt(1000));
 
-                        this.setFlyingDirectionZ(this.rand.nextInt(2) == 0
-                            ? 1000 + this.rand.nextInt(1000)
-                            : 1000 - this.rand.nextInt(1000));
+                        this.setFlyingDirectionZ(
+                            this.rand.nextInt(2) == 0 ? 1000 + this.rand.nextInt(1000)
+                                : 1000 - this.rand.nextInt(1000));
                         this.playSound("wildmobsmod:entity.goose.flying", this.getSoundVolume(), this.getSoundPitch());
                     }
 
@@ -364,7 +342,8 @@ public class EntityGoose extends EntityCreature implements IAnimals
                     this.fallTimer = 0;
                 }
             } else {
-                if (this.fallTimer < 5 && !this.worldObj.getBlock(blockX, blockY - 1, blockZ).isNormalCube()) {
+                if (this.fallTimer < 5 && !this.worldObj.getBlock(blockX, blockY - 1, blockZ)
+                    .isNormalCube()) {
                     this.fallTimer++;
                 }
                 this.motionY *= 1.2D;
@@ -409,50 +388,33 @@ public class EntityGoose extends EntityCreature implements IAnimals
         }
     }
 
-    public void onUpdate()
-    {
+    public void onUpdate() {
         super.onUpdate();
 
-        if(this.rand.nextFloat() < 0.004F && this.feedingAnimation <= 0)
-        {
+        if (this.rand.nextFloat() < 0.004F && this.feedingAnimation <= 0) {
             this.feedingAnimation = 1;
-        }
-        else if(this.feedingAnimation > 0 && this.feedingAnimation < 30)
-        {
+        } else if (this.feedingAnimation > 0 && this.feedingAnimation < 30) {
             this.feedingAnimation++;
-        }
-        else if(this.feedingAnimation >= 30)
-        {
+        } else if (this.feedingAnimation >= 30) {
             this.feedingAnimation = 0;
         }
     }
 
-    public boolean attackEntityFrom(DamageSource source, float amount)
-    {
-        if(this.isEntityInvulnerable())
-        {
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (this.isEntityInvulnerable()) {
             return false;
-        }
-        else
-        {
-            if(!this.worldObj.isRemote)
-            {
+        } else {
+            if (!this.worldObj.isRemote) {
                 this.setFlyingState(1);
-                if(this.rand.nextInt(2) == 0)
-                {
+                if (this.rand.nextInt(2) == 0) {
                     this.setFlyingDirectionX(10 + this.rand.nextInt(10));
-                }
-                else
-                {
+                } else {
                     this.setFlyingDirectionX(-10 - this.rand.nextInt(10));
                 }
 
-                if(this.rand.nextInt(2) == 0)
-                {
+                if (this.rand.nextInt(2) == 0) {
                     this.setFlyingDirectionZ(10 + this.rand.nextInt(10));
-                }
-                else
-                {
+                } else {
                     this.setFlyingDirectionZ(-10 - this.rand.nextInt(10));
                 }
                 this.playSound("wildmobsmod:entity.goose.flying", this.getSoundVolume(), this.getSoundPitch());
@@ -461,36 +423,31 @@ public class EntityGoose extends EntityCreature implements IAnimals
         }
     }
 
-    protected Item getDropItem()
-    {
+    protected Item getDropItem() {
         return Items.feather;
     }
 
-    protected void dropFewItems(boolean playerkill, int looting)
-    {
+    protected void dropFewItems(boolean playerkill, int looting) {
         int j = this.rand.nextInt(3) + this.rand.nextInt(1 + looting);
 
-        for(int k = 0; k < j; ++k)
-        {
+        for (int k = 0; k < j; ++k) {
             this.dropItem(Items.feather, 1);
         }
 
-        if(this.isBurning())
-        {
+        if (this.isBurning()) {
             this.dropItem(WildMobsModItems.cookedGoose, 1);
-        }
-        else
-        {
+        } else {
             this.dropItem(WildMobsModItems.rawGoose, 1);
         }
     }
+
     @Override
     public boolean getCanSpawnHere() {
         if (!super.getCanSpawnHere()) {
             return false;
         }
 
-        BiomeGenBase biome = worldObj.getBiomeGenForCoords((int)this.posX, (int)this.posZ);
+        BiomeGenBase biome = worldObj.getBiomeGenForCoords((int) this.posX, (int) this.posZ);
         if (biome == BiomeGenBase.beach) {
             return true;
         }

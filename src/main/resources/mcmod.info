@@ -1,27 +1,21 @@
-[
-    {
-        "modid": "wildmobsmod",
-        "name": "Wild Mobs",
-        "description": "Expands Minecrafts wildlife selection with various animals and monsters in a similar style.",
-        "version": "1.5.3",
-        "mcversion": "1.7.10",
-        "url": "",
-        "updateUrl": "",
-        "authorList":   
-            [
-                        "Markus1002 (original author)",
-                        "DracoScythem (1.7.10 development)",
-                        "Team Hollow (current maintainers)"
-            ],
-        "credits": "LeonelSaberTooth (direwolf model and textures), DoctorHyena (Cheetah Texture, Hyena)",
-        "logoFile":     "",
-        "screenshots":
-            [
-            
-            ],
-        "dependencies": 
-            [
-            
-            ]
-    }
-]
+{
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "wildmobsmod",
+		"name": "Wild Mobs",
+		"description": "Expands Minecrafts wildlife selection with various animals and monsters in a similar style.",
+		"version": "${modVersion}",
+		"mcversion": "1.7.10",
+		"url": "",
+		"updateUrl": "",
+		"authorList": ["Markus1002 (original author)", "DracoScythem (1.7.10 development)", "Team Hollow (current maintainers)"],
+		"credits": "LeonelSaberTooth (direwolf model and textures), DoctorHyena (Cheetah Texture, Hyena)",
+		"logoFile": "",
+		"screenshots": [],
+		"parent": "",
+		"requiredMods": [],
+		"dependencies": [],
+		"dependants": [],
+		"useDependencyInformation": true
+	}]
+}
