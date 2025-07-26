@@ -68,29 +68,32 @@ public class ItemJellyfishBucket extends ItemWM {
     @Override
     public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
         MovingObjectPosition mop = this.getMovingObjectPositionFromPlayer(world, player, true);
-        if (mop.typeOfHit == MovingObjectType.BLOCK) {
-            Block block = world.getBlock(mop.blockX, mop.blockY, mop.blockZ);
-            if (block.getMaterial() == (this.nether ? Material.lava : Material.water) && block instanceof BlockLiquid) {
-                if (!world.isRemote) {
-                    int type = stack.getItemDamage();
-                    EntityJellyfish jellyfish = new EntityJellyfish(world);
-                    jellyfish.setLocationAndAngles(
-                        mop.blockX + 0.5D,
-                        mop.blockY,
-                        mop.blockZ + 0.5D,
-                        MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0F),
-                        0.0F);
-                    jellyfish.rotationYawHead = jellyfish.rotationYaw;
-                    jellyfish.renderYawOffset = jellyfish.rotationYaw;
-                    jellyfish.onSpawnWithEgg((IEntityLivingData) null);
-                    jellyfish.setSkin(type);
-                    jellyfish.setNether(this.nether);
-                    if (stack.hasDisplayName()) {
-                        jellyfish.setCustomNameTag(stack.getDisplayName());
+        if (mop != null) {
+            if (mop.typeOfHit == MovingObjectType.BLOCK) {
+                Block block = world.getBlock(mop.blockX, mop.blockY, mop.blockZ);
+                if (block.getMaterial() == (this.nether ? Material.lava : Material.water)
+                    && block instanceof BlockLiquid) {
+                    if (!world.isRemote) {
+                        int type = stack.getItemDamage();
+                        EntityJellyfish jellyfish = new EntityJellyfish(world);
+                        jellyfish.setLocationAndAngles(
+                            mop.blockX + 0.5D,
+                            mop.blockY,
+                            mop.blockZ + 0.5D,
+                            MathHelper.wrapAngleTo180_float(world.rand.nextFloat() * 360.0F),
+                            0.0F);
+                        jellyfish.rotationYawHead = jellyfish.rotationYaw;
+                        jellyfish.renderYawOffset = jellyfish.rotationYaw;
+                        jellyfish.onSpawnWithEgg((IEntityLivingData) null);
+                        jellyfish.setSkin(type);
+                        jellyfish.setNether(this.nether);
+                        if (stack.hasDisplayName()) {
+                            jellyfish.setCustomNameTag(stack.getDisplayName());
+                        }
+                        world.spawnEntityInWorld(jellyfish);
                     }
-                    world.spawnEntityInWorld(jellyfish);
+                    return new ItemStack(this.nether ? Items.lava_bucket : Items.water_bucket);
                 }
-                return new ItemStack(this.nether ? Items.lava_bucket : Items.water_bucket);
             }
         }
         return stack;
